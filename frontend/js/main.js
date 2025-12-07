@@ -716,7 +716,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Carrega dados iniciais
         await Promise.all([
             carregarStatsGerais(),
-            carregarRanking('dia'),
+            carregarRanking('mes'),  // Mudado de 'dia' para 'mes'
             carregarVendedores()
         ]);
 
