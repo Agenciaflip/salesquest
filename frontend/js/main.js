@@ -3,10 +3,8 @@
  * Sistema de gamificação comercial completo
  */
 
-// API no VPS (produção) ou local (desenvolvimento)
-const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:5200/api'
-    : 'http://212.85.23.66:5200/api';
+// API sempre na VPS
+const API_URL = 'http://212.85.23.66:5200/api';
 
 // Estado global
 let vendedoresCache = [];
