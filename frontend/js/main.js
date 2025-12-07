@@ -3,8 +3,8 @@
  * Sistema de gamificação comercial completo
  */
 
-// API sempre na VPS
-const API_URL = 'http://212.85.23.66:5200/api';
+// API via HTTPS (Traefik)
+const API_URL = 'https://salesquest-api.agenciacafeonline.com.br/api';
 
 // Estado global
 let vendedoresCache = [];
