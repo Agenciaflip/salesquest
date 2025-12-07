@@ -3,7 +3,7 @@ export async function onRequest(context) {
   const { request, params } = context;
   const url = new URL(request.url);
 
-  // URL do backend via Traefik
+  // URL do backend via Traefik (HTTPS estável)
   const BACKEND_URL = 'https://vendasvox.agenciacafeonline.com.br';
 
   // Construir URL backend
