@@ -84,6 +84,8 @@ function configurarNavegacao() {
                     carregarMissoes();
                 } else if (pageName === 'coach') {
                     preencherSelectVendedores();
+                } else if (pageName === 'analise') {
+                    preencherSelectAnalise();
                 }
             }
         });
@@ -503,6 +505,206 @@ async function gerarRelatorio() {
     } else {
         resultDiv.innerHTML = '<p class="error-text">❌ Erro ao gerar mensagem. Tente novamente.</p>';
     }
+}
+
+// ================================
+// ANÁLISE DE CONVERSAS
+// ================================
+
+async function preencherSelectAnalise() {
+    const select = document.getElementById('analise-vendedor');
+
+    if (vendedoresCache.length === 0) {
+        vendedoresCache = await fetchAPI('/vendedores');
+    }
+
+    if (!vendedoresCache) return;
+
+    select.innerHTML = '<option value="">Escolha...</option>';
+
+    vendedoresCache.forEach(v => {
+        const option = document.createElement('option');
+        option.value = v.id;
+        option.textContent = `${v.avatar} ${v.nome}`;
+        select.appendChild(option);
+    });
+
+    // Listener para quando selecionar vendedor
+    select.addEventListener('change', () => {
+        const vendedorId = select.value;
+        if (vendedorId) {
+            carregarAnaliseVendedor(vendedorId);
+        } else {
+            document.getElementById('analise-container').innerHTML = '<p class="empty-state">Selecione um vendedor para ver a análise de qualidade.</p>';
+        }
+    });
+}
+
+async function carregarAnaliseVendedor(vendedorId) {
+    const container = document.getElementById('analise-container');
+
+    // Loading state
+    container.innerHTML = '<p class="empty-state">⏳ Carregando análise...</p>';
+
+    const data = await fetchAPI(`/analise/vendedor/${vendedorId}`);
+
+    if (!data) {
+        container.innerHTML = '<p class="empty-state">❌ Erro ao carregar análise. Tente novamente.</p>';
+        return;
+    }
+
+    // Renderizar análise completa
+    container.innerHTML = renderizarAnaliseCompleta(data);
+}
+
+function renderizarAnaliseCompleta(data) {
+    const { vendedor, nota_media_conversas, total_conversas_analisadas, performance, conversas_recentes } = data;
+
+    // Nota geral card
+    const notaCard = `
+        <div class="nota-card">
+            <div class="nota-card-title">📊 Nota Média de Conversas</div>
+            <div class="nota-valor">${nota_media_conversas.toFixed(1)}</div>
+            <div class="nota-label">de 10.0</div>
+            <div class="nota-detalhes">
+                <div class="nota-item">
+                    <div class="nota-item-label">Conversas</div>
+                    <div class="nota-item-valor">${total_conversas_analisadas}</div>
+                </div>
+                <div class="nota-item">
+                    <div class="nota-item-label">Vendedor</div>
+                    <div class="nota-item-valor">${vendedor.avatar} ${vendedor.nome}</div>
+                </div>
+                <div class="nota-item">
+                    <div class="nota-item-label">Nível</div>
+                    <div class="nota-item-valor">${vendedor.nivel}</div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Performance cards
+    let performanceCards = '';
+
+    if (performance && Object.keys(performance).length > 0) {
+        performanceCards = `
+            <div class="performance-grid">
+                ${renderizarPerformanceCard('📞 Leads', performance.leads)}
+                ${renderizarPerformanceCard('🎯 Entrevistas', performance.entrevistas)}
+                ${renderizarPerformanceCard('🔄 Conversões', performance.conversoes)}
+                ${renderizarPerformanceCard('💰 Vendas', performance.vendas)}
+            </div>
+        `;
+    }
+
+    // Conversas recentes
+    let conversasSection = '';
+
+    if (conversas_recentes && conversas_recentes.length > 0) {
+        const conversasList = conversas_recentes.map(conversa => renderizarConversaItem(conversa)).join('');
+
+        conversasSection = `
+            <div class="conversas-section">
+                <div class="conversas-titulo">💬 Últimas Conversas Analisadas</div>
+                <div class="conversas-list">
+                    ${conversasList}
+                </div>
+            </div>
+        `;
+    } else {
+        conversasSection = `
+            <div class="conversas-section">
+                <p class="empty-state">Nenhuma conversa analisada ainda.</p>
+            </div>
+        `;
+    }
+
+    return notaCard + performanceCards + conversasSection;
+}
+
+function renderizarPerformanceCard(titulo, data) {
+    if (!data) return '';
+
+    const { meta, atual, percentual } = data;
+
+    // Determinar cor do percentual
+    let classePercentual = 'red';
+    if (percentual >= 100) classePercentual = 'green';
+    else if (percentual >= 70) classePercentual = 'yellow';
+
+    const progresso = Math.min(percentual, 100); // Cap em 100% visualmente
+
+    return `
+        <div class="performance-card">
+            <div class="performance-header">
+                <div class="performance-titulo">${titulo}</div>
+                <div class="performance-percentual ${classePercentual}">${percentual}%</div>
+            </div>
+            <div class="performance-valores">
+                <div class="performance-atual">${formatarNumero(atual)}</div>
+                <div class="performance-meta">Meta: ${formatarNumero(meta)}</div>
+            </div>
+            <div class="performance-bar">
+                <div class="performance-bar-fill" style="width: ${progresso}%"></div>
+            </div>
+        </div>
+    `;
+}
+
+function renderizarConversaItem(conversa) {
+    const { cliente_nome, tipo_conversa, nota_geral, resultado, data_conversa, duracao_segundos } = conversa;
+
+    // Classificar nota
+    let scoreClass = 'poor';
+    if (nota_geral >= 8.5) scoreClass = 'excellent';
+    else if (nota_geral >= 7.0) scoreClass = 'good';
+    else if (nota_geral >= 5.5) scoreClass = 'average';
+
+    // Classificar resultado
+    const resultadoMap = {
+        'venda_fechada': '💰 Venda Fechada',
+        'agendamento': '📅 Agendamento',
+        'interesse': '🤔 Interesse',
+        'sem_interesse': '❌ Sem Interesse',
+        'perdido': '❌ Perdido'
+    };
+
+    const resultadoTexto = resultadoMap[resultado] || resultado;
+
+    // Formatar data
+    const dataObj = new Date(data_conversa);
+    const dataFormatada = dataObj.toLocaleString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    // Ícone tipo conversa
+    const tipoIcon = tipo_conversa === 'whatsapp' ? '💬' : '📞';
+
+    // Duração (se houver)
+    let duracaoTexto = '';
+    if (duracao_segundos) {
+        const minutos = Math.floor(duracao_segundos / 60);
+        const segundos = duracao_segundos % 60;
+        duracaoTexto = `⏱️ ${minutos}:${segundos.toString().padStart(2, '0')}`;
+    }
+
+    return `
+        <div class="conversa-item">
+            <div class="conversa-header">
+                <div class="conversa-cliente">${cliente_nome}</div>
+                <div class="conversa-score ${scoreClass}">${nota_geral.toFixed(1)}/10</div>
+            </div>
+            <div class="conversa-info">
+                <div class="conversa-tipo">${tipoIcon} ${tipo_conversa}</div>
+                <div class="conversa-data">📅 ${dataFormatada}</div>
+                ${duracaoTexto ? `<div class="conversa-duracao">${duracaoTexto}</div>` : ''}
+                <div class="conversa-resultado ${resultado}">${resultadoTexto}</div>
+            </div>
+        </div>
+    `;
 }
 
 // ================================

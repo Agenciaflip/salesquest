@@ -33,6 +33,10 @@
                         <span class="nav-icon">👥</span>
                         <span>Vendedores</span>
                     </a>
+                    <a href="#analise" class="nav-link" data-page="analise">
+                        <span class="nav-icon">📊</span>
+                        <span>Análise</span>
+                    </a>
                     <a href="#missoes" class="nav-link" data-page="missoes">
                         <span class="nav-icon">🎯</span>
                         <span>Missões</span>
@@ -168,6 +172,31 @@
                     </div>
                     <div class="vendedores-grid" id="vendedores-grid">
                         <!-- Preenchido via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page: Análise de Conversas -->
+            <div id="page-analise" class="page">
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="title-icon">📊</span>
+                            Análise de Qualidade
+                        </h2>
+                    </div>
+
+                    <!-- Seletor de Vendedor -->
+                    <div class="analise-selector">
+                        <label for="analise-vendedor">Selecione um vendedor:</label>
+                        <select id="analise-vendedor" class="analise-select">
+                            <option value="">Escolha...</option>
+                        </select>
+                    </div>
+
+                    <!-- Container de Análise -->
+                    <div id="analise-container">
+                        <p class="empty-state">Selecione um vendedor para ver a análise de qualidade.</p>
                     </div>
                 </div>
             </div>
