@@ -1,0 +1,7 @@
+name = "salesquest"
+compatibility_date = "2024-12-06"
+
+pages_build_output_dir = "frontend"
+
+[env.production]
+pages_build_output_dir = "frontend"
