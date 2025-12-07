@@ -3,12 +3,12 @@ export async function onRequest(context) {
   const { request, params } = context;
   const url = new URL(request.url);
 
-  // URL do Cloudflare Tunnel
-  const TUNNEL_URL = 'https://neck-shipped-searches-spent.trycloudflare.com';
+  // URL do backend via Traefik
+  const BACKEND_URL = 'https://vendasvox.agenciacafeonline.com.br';
 
   // Construir URL backend
   const path = params.catchall ? params.catchall.join('/') : '';
-  const backendUrl = `${TUNNEL_URL}/api/${path}${url.search}`;
+  const backendUrl = `${BACKEND_URL}/api/${path}${url.search}`;
 
   // CORS Preflight
   if (request.method === 'OPTIONS') {
