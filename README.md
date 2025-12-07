@@ -35,6 +35,10 @@ Sistema completo de gamificação para equipes de vendas com IA proativa, rankin
 - 📊 **API Docs**: http://212.85.23.66:5200/api/health
 - 🏆 **Ranking**: http://212.85.23.66:5200/api/ranking
 
+### **Cloudflare Pages**
+- 🌐 **Dashboard**: https://salesquest.pages.dev
+- 📦 **GitHub**: https://github.com/Agenciaflip/salesquest
+
 ### **Localmente**
 - 🌐 **Dashboard**: http://localhost:5200
 - 📊 **API**: http://localhost:5200/api/health
@@ -59,7 +63,7 @@ Sistema completo de gamificação para equipes de vendas com IA proativa, rankin
 
 ### **Pontos Base**
 | Ação | Pontos | Multiplicadores |
-|------|--------|-----------------|
+|------|--------|--------------------|
 | Lead alcançado | 2 XP | +50% se passar meta diária |
 | Entrevista agendada | 10 XP | +25% se agendar mesmo dia |
 | Entrevista realizada | 15 XP | +50% se converter |
@@ -163,6 +167,8 @@ GET /api/health                  # Health check
 **Infraestrutura**:
 - PM2 (gerenciamento processos)
 - VPS (212.85.23.66)
+- Cloudflare Pages (frontend)
+- GitHub (repositório)
 - Evolution API (WhatsApp)
 
 ---
@@ -181,12 +187,13 @@ salesquest/
 │       └── whatsapp.py           # WhatsApp sender
 ├── frontend/
 │   ├── index.html                # Dashboard
-│   ├── css/styles.css            # Estilos
-│   └── js/main.js                # JavaScript
+│   ├── css/styles.css            # Estilos (908 linhas)
+│   └── js/main.js                # JavaScript (542 linhas)
 ├── data/
 │   └── mock_crm.py               # Popular banco
 ├── salesquest.db                 # Banco SQLite
 ├── requirements.txt              # Dependências Python
+├── deploy-cloudflare.sh          # Script deploy
 └── README.md                     # Este arquivo
 ```
 
