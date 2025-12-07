@@ -3,8 +3,8 @@
  * Sistema de gamificação comercial completo
  */
 
-// API direto na VPS (HTTP)
-const API_URL = 'http://212.85.23.66:5200/api';
+// API via Cloudflare Pages Function (proxy HTTPS)
+const API_URL = '/api';
 
 // Estado global
 let vendedoresCache = [];
