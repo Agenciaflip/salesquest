@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SalesQuest - Dashboard de Gamificação</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🎮</span>
+                    <span class="logo-text">SalesQuest</span>
+                </div>
+                <nav class="nav">
+                    <a href="/" class="nav-link active">Ranking</a>
+                    <a href="/perfil.html" class="nav-link">Meu Perfil</a>
+                    <a href="/missoes.html" class="nav-link">Missões</a>
+                    <a href="/conquistas.html" class="nav-link">Conquistas</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Vendedores Ativos</div>
+                        <div class="stat-value" id="total-vendedores">0</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📞</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Leads Hoje</div>
+                        <div class="stat-value" id="total-leads">0</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Entrevistas Hoje</div>
+                        <div class="stat-value" id="total-entrevistas">0</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Vendas Hoje</div>
+                        <div class="stat-value" id="total-vendas">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ranking Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">🏆 Ranking</h2>
+                    <div class="periodo-tabs">
+                        <button class="periodo-tab active" data-periodo="dia">Hoje</button>
+                        <button class="periodo-tab" data-periodo="semana">Semana</button>
+                        <button class="periodo-tab" data-periodo="mes">Mês</button>
+                    </div>
+                </div>
+
+                <!-- Pódio (Top 3) -->
+                <div class="podio">
+                    <div class="podio-item segundo" id="podio-2">
+                        <div class="podio-medal">🥈</div>
+                        <div class="podio-avatar">⭐</div>
+                        <div class="podio-nome">-</div>
+                        <div class="podio-pontos">0 XP</div>
+                    </div>
+
+                    <div class="podio-item primeiro" id="podio-1">
+                        <div class="podio-medal">🥇</div>
+                        <div class="podio-avatar">👑</div>
+                        <div class="podio-nome">-</div>
+                        <div class="podio-pontos">0 XP</div>
+                        <div class="crown">👑</div>
+                    </div>
+
+                    <div class="podio-item terceiro" id="podio-3">
+                        <div class="podio-medal">🥉</div>
+                        <div class="podio-avatar">💎</div>
+                        <div class="podio-nome">-</div>
+                        <div class="podio-pontos">0 XP</div>
+                    </div>
+                </div>
+
+                <!-- Ranking Completo -->
+                <div class="ranking-list" id="ranking-list">
+                    <!-- Será preenchido via JS -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>🎮 SalesQuest v1.0 - Plataforma de Gamificação Comercial</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
