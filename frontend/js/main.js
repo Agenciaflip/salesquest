@@ -712,21 +712,25 @@ function renderizarConversaItem(conversa) {
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('🎮 SalesQuest carregando...');
 
-    // Carrega dados iniciais
-    await Promise.all([
-        carregarStatsGerais(),
-        carregarRanking('dia'),
-        carregarVendedores()
-    ]);
+    try {
+        // Carrega dados iniciais
+        await Promise.all([
+            carregarStatsGerais(),
+            carregarRanking('dia'),
+            carregarVendedores()
+        ]);
 
-    // Configura navegação e tabs
-    configurarNavegacao();
-    configurarTabs();
+        // Configura navegação e tabs
+        configurarNavegacao();
+        configurarTabs();
 
-    // Esconde loading screen
-    esconderLoading();
-
-    console.log('✅ SalesQuest pronto!');
+        console.log('✅ SalesQuest pronto!');
+    } catch (error) {
+        console.error('Erro ao carregar dados iniciais:', error);
+    } finally {
+        // Esconde loading screen (sempre executa, mesmo com erro)
+        esconderLoading();
+    }
 
     // Atualiza a cada 30 segundos
     setInterval(() => {
